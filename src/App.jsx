@@ -32,6 +32,8 @@ import { useQuery } from '@tanstack/react-query';
 import LoadingSpinner from './components/common/LoadingSpinner.jsx';
 import { createContext, useEffect,  useRef  } from 'react';
 
+const API_URL = "https://backend-c3y1.onrender.com"; // Producción
+
 
 // Crear un contexto para compartir el tiempo en pantalla
 export const TimeSpentContext = createContext();
@@ -45,7 +47,13 @@ function App() {
     queryKey: ['authUser'],
     queryFn: async () => {
       try {
-        const res = await fetch('/api/auth/me');
+        const res = await fetch(`${API_URL}/api/auth/me`, {
+          method: "GET", // O POST, según tu caso
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // Habilita el envío de cookies
+        });
         const data = await res.json();
         if (data.error) return null;
         if (!res.ok) {
